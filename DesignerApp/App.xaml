@@ -1,0 +1,16 @@
+﻿<Application x:Class="WorldForge.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainAppWindow.xaml">
+    <Application.Resources>
+        <Style TargetType="Control" x:Key="EmptyFocusVisualStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Application.Resources>
+</Application>

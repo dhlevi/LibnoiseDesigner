@@ -1,0 +1,56 @@
+<LibNoise>
+  <Module type="Final" guid="finalCache" position="1012.04459635417,143.29875">
+    <ModuleInputs>
+      <Input>Turbulence</Input>
+    </ModuleInputs>
+  </Module>
+  <Module type="RidgedMultifractal" guid="MountainTerrain" position="24.4453125000003,89.525">
+    <Frequency>1</Frequency>
+    <Lacunarity>2</Lacunarity>
+    <OctaveCount>6</OctaveCount>
+    <Quality>Medium</Quality>
+    <Seed>0</Seed>
+  </Module>
+  <Module type="Billow" guid="BaseFlatTerrain" position="23.2031250000003,11.535">
+    <Frequency>2</Frequency>
+    <Lacunarity>2</Lacunarity>
+    <OctaveCount>6</OctaveCount>
+    <Persistence>0.5</Persistence>
+    <Quality>Medium</Quality>
+    <Seed>0</Seed>
+  </Module>
+  <Module type="ScaleBias" guid="FlatTerrain" position="267.710069444445,25.5350000000001">
+    <Scale>0.125</Scale>
+    <Bias>-0.75</Bias>
+    <ModuleInputs>
+      <Input>BaseFlatTerrain</Input>
+    </ModuleInputs>
+  </Module>
+  <Module type="Perlin" guid="TerrainType" position="23.7048611111114,170.3475">
+    <Frequency>0.5</Frequency>
+    <Lacunarity>2</Lacunarity>
+    <OctaveCount>6</OctaveCount>
+    <Persistence>0.25</Persistence>
+    <Quality>Medium</Quality>
+    <Seed>0</Seed>
+  </Module>
+  <Module type="Select" guid="TerrainSelector" position="546.206597222223,111.6375">
+    <Minimum>0</Minimum>
+    <Maximum>1000</Maximum>
+    <FallOff>0.125</FallOff>
+    <ModuleInputs>
+      <Primary>FlatTerrain</Primary>
+      <Secondary>MountainTerrain</Secondary>
+      <Controller>TerrainType</Controller>
+    </ModuleInputs>
+  </Module>
+  <Module type="Turbulence" guid="Turbulence" position="777.066514756944,143.8025">
+    <Frequency>4</Frequency>
+    <Power>0.125</Power>
+    <Roughness>6</Roughness>
+    <Seed>0</Seed>
+    <ModuleInputs>
+      <Input>TerrainSelector</Input>
+    </ModuleInputs>
+  </Module>
+</LibNoise>
