@@ -1,7 +1,9 @@
-﻿using LibNoise.Operator;
+﻿using LibNoise;
+using LibNoise.Operator;
 using Microsoft.Win32;
 using NetworkModel;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,8 +28,8 @@ namespace WorldForge
         {
             // validate the diagram first
 
-            bool validNoise = ValidateDiagram.ValidateNoiseGeneration(LibnoiseDesigner.networkControl.Nodes.Cast<NodeViewModel>().ToList());
-            bool validNames = ValidateDiagram.ValidateUniqueNames(LibnoiseDesigner.networkControl.Nodes.Cast<NodeViewModel>().ToList());
+            bool validNoise = ValidateDiagram.ValidateNoiseGeneration(DesignerViewer.networkControl.Nodes.Cast<NodeViewModel>().ToList());
+            bool validNames = ValidateDiagram.ValidateUniqueNames(DesignerViewer.networkControl.Nodes.Cast<NodeViewModel>().ToList());
 
             if (!validNoise && validNames) MessageBox.Show("The diagram is invalid and cannot be saved at this time. Please verify links to the final module are valid and not circular.", "Invalid", MessageBoxButton.OK, MessageBoxImage.Error);
             else if (validNoise && !validNames) MessageBox.Show("The diagram is invalid and cannot be saved at this time. Please verify all modules have unique names.", "Invalid", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -36,7 +38,7 @@ namespace WorldForge
             {
                 try
                 {
-                    XmlDocument doc = LibnoiseFileUtils.DiagramToXML(LibnoiseDesigner.networkControl.Nodes);
+                    XmlDocument doc = LibnoiseFileUtils.DiagramToXML(DesignerViewer.networkControl.Nodes);
 
                     SaveFileDialog saveFileDialog = new SaveFileDialog();
                     saveFileDialog.Filter = "XML Document|*.xml";
@@ -57,8 +59,8 @@ namespace WorldForge
 
         private void NewItem_Click(object sender, RoutedEventArgs e)
         {
-            LibnoiseDesigner.ViewModel.DeleteAllNodes();
-            NodeViewModel finalNode = LibnoiseDesigner.ViewModel.CreateNode(new Final(), new Point(100, 60), false);
+            DesignerViewer.ViewModel.DeleteAllNodes();
+            NodeViewModel finalNode = DesignerViewer.ViewModel.CreateNode(new Final(), new Point(100, 60), false);
         }
 
         private void LoadLibnoiseItem_Click(object sender, RoutedEventArgs e)
@@ -73,9 +75,9 @@ namespace WorldForge
                 XmlDocument doc = new XmlDocument();
                 doc.Load(openFileDialog.FileName);
 
-                LibnoiseFileUtils.LoadLibnoiseXml(doc, LibnoiseDesigner);
+                LibnoiseFileUtils.LoadLibnoiseXml(doc, DesignerViewer);
 
-                LibnoiseDesigner.ResizeWorkarea();
+                DesignerViewer.ResizeWorkarea();
             }
         }
 
@@ -86,18 +88,18 @@ namespace WorldForge
 
         private void LibnoiseDetailedItem_Click(object sender, RoutedEventArgs e)
         {
-            LibnoiseFileUtils.LoadDetailedXml(LibnoiseDesigner);
+            LibnoiseFileUtils.LoadDetailedXml(DesignerViewer);
         }
 
         private void LibnoiseSimpleItem_Click(object sender, RoutedEventArgs e)
         {
-            LibnoiseFileUtils.LoadDefaultXml(LibnoiseDesigner);
+            LibnoiseFileUtils.LoadDefaultXml(DesignerViewer);
         }
 
         private void ExportClassItem_Click(object sender, RoutedEventArgs e)
         {
-             bool validNoise = ValidateDiagram.ValidateNoiseGeneration(LibnoiseDesigner.networkControl.Nodes.Cast<NodeViewModel>().ToList());
-            bool validNames = ValidateDiagram.ValidateUniqueNames(LibnoiseDesigner.networkControl.Nodes.Cast<NodeViewModel>().ToList());
+            bool validNoise = ValidateDiagram.ValidateNoiseGeneration(DesignerViewer.networkControl.Nodes.Cast<NodeViewModel>().ToList());
+            bool validNames = ValidateDiagram.ValidateUniqueNames(DesignerViewer.networkControl.Nodes.Cast<NodeViewModel>().ToList());
 
             if (!validNoise && validNames) MessageBox.Show("The diagram is invalid and cannot be saved at this time. Please verify links to the final module are valid and not circular.", "Invalid", MessageBoxButton.OK, MessageBoxImage.Error);
             else if (validNoise && !validNames) MessageBox.Show("The diagram is invalid and cannot be saved at this time. Please verify all modules have unique names.", "Invalid", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -113,7 +115,7 @@ namespace WorldForge
 
                     if (!string.IsNullOrEmpty(saveFileDialog.FileName))
                     {
-                        StringBuilder sb = LibnoiseFileUtils.ExportToClass(LibnoiseDesigner.networkControl.Nodes);
+                        StringBuilder sb = LibnoiseFileUtils.ExportToClass(DesignerViewer.networkControl.Nodes);
 
                         using (StreamWriter outfile = new StreamWriter(saveFileDialog.FileName))
                         {
@@ -126,6 +128,12 @@ namespace WorldForge
                     MessageBox.Show("An error occured attempting to save the Libnoise Document. " + ex.Message);
                 }
             }
+        }
+
+        private void ExportImage_Click(object sender, RoutedEventArgs e)
+        {
+            PreviewWindow pw = new PreviewWindow(DesignerViewer.networkControl.Nodes);
+            pw.ShowDialog();
         }
     }
 }

@@ -28,11 +28,11 @@ namespace LibNoise
         /// <param name="north">The clip region to the north.</param>
         /// <param name="west">The clip region to the west.</param>
         /// <param name="east">The clip region to the east.</param>
-        public static float[,] GenerateSpherical(ModuleBase module, int width, int height, double south, double north, double west, double east, bool isNormalized = true, int scale = 0, int threads = 1)
+        public static double[,] GenerateSpherical(ModuleBase module, int width, int height, double south, double north, double west, double east, bool isNormalized = true, int scale = 0)
         {
             int ucWidth = width + UC_BORDER * 2;
             int ucHeight = height + UC_BORDER * 2;
-            float[,] data = new float[ucWidth, ucHeight];
+            double[,] data = new double[ucWidth, ucHeight];
 
             if (east <= west || north <= south) throw new ArgumentException("Invalid east/west or north/south combination");
             if (module == null) throw new ArgumentNullException("Generator is null");
@@ -60,7 +60,7 @@ namespace LibNoise
             // now that we have each sample calculated, run through and fetch the noise
             // Parallelism should be set somwhere from 1 to Processor Count / 2.
             var rangePartitioner = Partitioner.Create(0, processValues.Count);
-            Parallel.ForEach(rangePartitioner, new ParallelOptions { MaxDegreeOfParallelism = threads }, range =>
+            Parallel.ForEach(rangePartitioner, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, range =>
             {
                 for (int i = range.Item1; i < range .Item2; i++)
                 {
@@ -68,7 +68,7 @@ namespace LibNoise
                     double sample = GenerateSphericalPoint(module, processHelper.innerValue, processHelper.outerValue, scale);
                     if (isNormalized) sample = (sample + 1) / 2;
 
-                    data[processHelper.x, processHelper.y] = (float)sample;
+                    data[processHelper.x, processHelper.y] = sample;
                 }
             });
 

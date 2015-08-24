@@ -22,12 +22,13 @@
                 <MenuItem Header="Open Diagram" Click="LoadLibnoiseItem_Click" />
                 <Separator/>
                 <MenuItem Header="Export as C# class" Click="ExportClassItem_Click" />
+                <MenuItem Header="Preview/Export Image" Click="ExportImage_Click" />
                 <Separator/>
                 <MenuItem Header="Exit" Click="ExitItem_Click" />
             </MenuItem>
         </Menu>
 
-        <lnd:DesignerViewer Grid.Row="1" x:Name="LibnoiseDesigner" Margin="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <lnd:DesignerViewer Grid.Row="1" x:Name="DesignerViewer" Margin="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
     </Grid>
 </Window>
