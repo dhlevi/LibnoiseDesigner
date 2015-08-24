@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Libnoise Designer : A visual interface to interact with the LibNoise library.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Libnoise Designer</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/modopotato/LibnoiseDesigner">View on GitHub</a>
+
+          <h1 id="project_title">Libnoise Designer</h1>
+          <h2 id="project_tagline">A visual interface to interact with the LibNoise library.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/modopotato/LibnoiseDesigner/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/modopotato/LibnoiseDesigner/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="libnoise-designer" class="anchor" href="#libnoise-designer" aria-hidden="true"><span class="octicon octicon-link"></span></a>LibNoise Designer</h1>
+
+<p>Recently I was working on a project using a c# port of the <a href="http://libnoise.sourceforge.net/index.html">LibNoise Library</a>. LibNoise itself is very straightforward coherent noise library and very easy to use, however I found testing and debugging to be a bit of a pain with a lot of trial and error, and I started looking for something to help with quickly testing settings and module options. Unable to find any better solution, I decided to build my own utility, and after a weekend of fiddling, LibNoise Designer was born!</p>
+
+<p><img src="https://raw.githubusercontent.com/modopotato/LibnoiseDesigner/master/ExampleImages/lnd_preview1.png" alt="Libnoise Designer Interface"></p>
+
+<h2>
+<a id="what-does-this-appliction-do" class="anchor" href="#what-does-this-appliction-do" aria-hidden="true"><span class="octicon octicon-link"></span></a>What does this appliction do:</h2>
+
+<p>Gives the user a visual interface to interact with LibNoise. The user can save the script in an XML format for use with the designer, or export to a c# class file that can be dropped into the development environment. Preview images can be generated and saved as png's.</p>
+
+<h2>
+<a id="what-it-doesnt-do" class="anchor" href="#what-it-doesnt-do" aria-hidden="true"><span class="octicon octicon-link"></span></a>What it doesn't do:</h2>
+
+<p>Anything else.</p>
+
+<h2>
+<a id="how-to-use-the-designer" class="anchor" href="#how-to-use-the-designer" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use the Designer:</h2>
+
+<p>LibNoise Designer is pretty simple. To add libnoise Modules, right click anywhere on the designer workspace, select "Create Libnoise Node", and select an operator or generator to place on the workspace. To link modules together, click and drag from the output links to any input link.</p>
+
+<p><img src="https://raw.githubusercontent.com/modopotato/LibnoiseDesigner/master/ExampleImages/lnd_preview2.png" alt="Adding additional modules"></p>
+
+<p>For any module diagram to validate and export/save properly, the nodes must eventually end at the  green "Final" node. This is the last step of any libnoise designer diagram. Nodes not connected to the final node will not be saved or exported.</p>
+
+<p>You can double-click on a node to expand it, allowing you to enter a unique name for the module.</p>
+
+<p><img src="https://raw.githubusercontent.com/modopotato/LibnoiseDesigner/master/ExampleImages/lnd_preview3.png" alt="Libnoise Designer Interface">
+<em>Setting the name of a module by double-clicking the module node. You can trace the path from there too!</em></p>
+
+<p>You can select a single node by single left-clicking. Holding left-ctrl and dragging will select multiple nodes. Pressing the delete key with a node selected will remove it from the workspace. Otherwise, to delete a node or a connection, mouse over the node and highlight the little pair of scissors delete icon which pops up.</p>
+
+<p>Zooming in or out can be done with the mouse wheel or the relevant buttons.</p>
+
+<p>If you have more nodes then a workspace can fit, click the "resize workspace" button to fit the working area to your designer layout.</p>
+
+<p>The Validate button will ensure the module and nodes connected to the "Final" node are valid and will generate working code.</p>
+
+<p>Bugs: Many, I'm sure. It's a quick development tool that I thought others might get some use out of, but it is far from perfect and not meant for any serious commercial use.</p>
+
+<h2>
+<a id="future-enhancements" class="anchor" href="#future-enhancements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Future enhancements:</h2>
+
+<p>Maybe a few things to add... export to additional programming languages where LibNoise is used, to start. Some additional utilities to aid in the diagrams, such as bookmarks and grouping. That sort of thing.</p>
+
+<h2>
+<a id="screenshots" class="anchor" href="#screenshots" aria-hidden="true"><span class="octicon octicon-link"></span></a>Screenshots</h2>
+
+<p><img src="https://raw.githubusercontent.com/modopotato/LibnoiseDesigner/master/ExampleImages/lnd_preview4.png" alt="Libnoise Designer Interface">
+Export to c# code.</p>
+
+<p><img src="https://raw.githubusercontent.com/modopotato/LibnoiseDesigner/master/ExampleImages/lnd_preview7.png" alt="Libnoise Designer Interface">
+The generated XML for use with LibNoise Designer</p>
+
+<p><img src="https://raw.githubusercontent.com/modopotato/LibnoiseDesigner/master/ExampleImages/lnd_preview5.png" alt="Libnoise Designer Interface">
+Preview from the "Detailed" LibNoise Example</p>
+
+<p><img src="https://raw.githubusercontent.com/modopotato/LibnoiseDesigner/master/ExampleImages/lnd_preview6.png" alt="Libnoise Designer Interface">
+Styling a preview with the "World" style</p>
+
+<h2>
+<a id="libraries-and-credits" class="anchor" href="#libraries-and-credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Libraries and Credits</h2>
+
+<p>LibNoise designer is built in c# and WPF, and utilizes the following packages:</p>
+
+<p>NetworkView: A WPF custom control for visualizing and editing networks, graphs and flow-charts:
+<a href="http://www.codeproject.com/Articles/182683/NetworkView-A-WPF-custom-control-for-visualizing-a">http://www.codeproject.com/Articles/182683/NetworkView-A-WPF-custom-control-for-visualizing-a</a></p>
+
+<p>Though I've modified pieces of it, the designer itself started with Ashley Davis excellent WPF project on Code Project. The project is an excellent example and tutorial with WFP development in general, but more importantnly a pretty nice looking and easy to work with diagram control. This library is released under the The Code Project Open License (CPOL) 1.02 (<a href="http://www.codeproject.com/info/cpol10.aspx">http://www.codeproject.com/info/cpol10.aspx</a>)</p>
+
+<p>Extended WPF Toolkit:
+<a href="http://wpftoolkit.codeplex.com/">http://wpftoolkit.codeplex.com/</a></p>
+
+<p>XCeed's Extended WPF toolkit was used for the property grid panel primarily. It's an excellent batch of tools and controls to have for any WPF project though. I used the community edition, which is released under the Microsoft Public License (<a href="http://opensource.org/licenses/MS-PL">http://opensource.org/licenses/MS-PL</a>)</p>
+
+<p>LibNoise:
+<a href="http://libnoise.sourceforge.net/index.html">http://libnoise.sourceforge.net/index.html</a></p>
+
+<p>Libnoise, originally developed for c++ and released under the GNU General Public License, version 2 (<a href="http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html">http://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html</a>) From their website: libnoise is a portable C++ library that is used to generate coherent noise, a type of smoothly-changing noise. libnoise can generate Perlin noise, ridged multifractal noise, and other types of coherent-noise.</p>
+
+<p>For use in this project, I used a c# port from ricardojmendez on GitHub (<a href="https://github.com/ricardojmendez/LibNoise.Unity">https://github.com/ricardojmendez/LibNoise.Unity</a>) that was originally developed for use with Unity, and released under the GNU Lesser General Public License (<a href="https://www.gnu.org/licenses/lgpl.html">https://www.gnu.org/licenses/lgpl.html</a>).</p>
+
+<p>LibNoise Designer is released under the LGPL 3.0 Licence (<a href="http://www.gnu.org/licenses/lgpl.html">http://www.gnu.org/licenses/lgpl.html</a>)</p>
+
+<p>The application icon came from <a href="http://findicons.com/pack/1580/devine_icons_part_2">http://findicons.com/pack/1580/devine_icons_part_2</a> created by <a href="http://ipapun.deviantart.com/">http://ipapun.deviantart.com/</a></p>
+
+<p>LibNoise designer Copyright (C) 2015 Dylan Hemsworth</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libnoise Designer maintained by <a href="https://github.com/modopotato">modopotato</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
