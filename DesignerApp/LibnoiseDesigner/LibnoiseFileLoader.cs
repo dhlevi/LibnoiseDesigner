@@ -4,6 +4,7 @@ using LibNoise.Operator;
 using NetworkModel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -34,7 +35,7 @@ namespace WorldForge.LibnoiseDesigner
             sb.AppendLine("    {");
             sb.AppendLine("        public static ModuleBase CustomNoiseModule()");
             sb.AppendLine("        {");
-            
+
             foreach (Object o in nodes)
             {
                 NodeViewModel nvm = (NodeViewModel)o;
@@ -122,7 +123,7 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Curve":
                         sb.AppendLine("            Curve " + nvm.Module.ID + " = new Curve();");
-                        
+
                         foreach (CurveControlPoint cp in ((Curve)nvm.Module.LibnoiseModule).ControlPoints)
                         {
                             sb.AppendLine("            " + nvm.Module.ID + ".Add(" + cp.X + ", " + cp.Y + ");");
@@ -463,7 +464,7 @@ namespace WorldForge.LibnoiseDesigner
             doc.Load(defaultXml);
             LoadLibnoiseXml(doc, LibnoiseDesigner);
         }
-        
+
         public static void LoadDetailedXml(DesignerViewer LibnoiseDesigner)
         {
             Stream detailedXml = EmbeddedResourceUtils.GetEmbeddedResourceStream("WorldForge.Resources.detailed.xml");
@@ -527,7 +528,7 @@ namespace WorldForge.LibnoiseDesigner
             {
                 if (lm.Module.GetType() == typeof(Final)) finalModule = lm.Module;
 
-                for(int i = 0; i < lm.Links.Count; i++)
+                for (int i = 0; i < lm.Links.Count; i++)
                 {
                     lm.Module.Modules[i] = loadedModules.First(m => m.ID.Equals(lm.Links[i])).Module;
                 }
@@ -543,7 +544,7 @@ namespace WorldForge.LibnoiseDesigner
             foreach (XmlNode node in moduleList)
             {
                 string id = node.Attributes["guid"].Value;
-                Point position = new Point(double.Parse(node.Attributes["position"].Value.Split(',')[0]), double.Parse(node.Attributes["position"].Value.Split(',')[1]));
+                Point position = new Point(ParseDouble(node.Attributes["position"].Value.Split(',')[0]), ParseDouble(node.Attributes["position"].Value.Split(',')[1]));
                 ModuleBase module = null;
 
                 List<string> links = new List<string>();
@@ -552,10 +553,10 @@ namespace WorldForge.LibnoiseDesigner
                 {
                     case "Billow":
                         Billow billow = new Billow();
-                        billow.Frequency = double.Parse(node.SelectSingleNode("Frequency").InnerText);
-                        billow.Lacunarity = double.Parse(node.SelectSingleNode("Lacunarity").InnerText);
+                        billow.Frequency = ParseDouble(node.SelectSingleNode("Frequency").InnerText);
+                        billow.Lacunarity = ParseDouble(node.SelectSingleNode("Lacunarity").InnerText);
                         billow.OctaveCount = int.Parse(node.SelectSingleNode("OctaveCount").InnerText);
-                        billow.Persistence = double.Parse(node.SelectSingleNode("Persistence").InnerText);
+                        billow.Persistence = ParseDouble(node.SelectSingleNode("Persistence").InnerText);
                         billow.Quality = (QualityMode)Enum.Parse(typeof(QualityMode), node.SelectSingleNode("Quality").InnerText);
                         billow.Seed = int.Parse(node.SelectSingleNode("Seed").InnerText);
                         module = billow;
@@ -565,28 +566,28 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Const":
                         Const con = new Const();
-                        con.Value = double.Parse(node.SelectSingleNode("Value").InnerText);
+                        con.Value = ParseDouble(node.SelectSingleNode("Value").InnerText);
                         module = con;
                         break;
                     case "Cylinders":
                         Cylinders cylinder = new Cylinders();
-                        cylinder.Frequency = double.Parse(node.SelectSingleNode("Frequency").InnerText);
+                        cylinder.Frequency = ParseDouble(node.SelectSingleNode("Frequency").InnerText);
                         module = cylinder;
                         break;
                     case "Perlin":
                         Perlin perlin = new Perlin();
-                        perlin.Frequency = double.Parse(node.SelectSingleNode("Frequency").InnerText);
-                        perlin.Lacunarity = double.Parse(node.SelectSingleNode("Lacunarity").InnerText);
+                        perlin.Frequency = ParseDouble(node.SelectSingleNode("Frequency").InnerText);
+                        perlin.Lacunarity = ParseDouble(node.SelectSingleNode("Lacunarity").InnerText);
                         perlin.OctaveCount = int.Parse(node.SelectSingleNode("OctaveCount").InnerText);
-                        perlin.Persistence = double.Parse(node.SelectSingleNode("Persistence").InnerText);
+                        perlin.Persistence = ParseDouble(node.SelectSingleNode("Persistence").InnerText);
                         perlin.Quality = (QualityMode)Enum.Parse(typeof(QualityMode), node.SelectSingleNode("Quality").InnerText);
                         perlin.Seed = int.Parse(node.SelectSingleNode("Seed").InnerText);
                         module = perlin;
                         break;
                     case "RidgedMultifractal":
                         RidgedMultifractal ridgedMF = new RidgedMultifractal();
-                        ridgedMF.Frequency = double.Parse(node.SelectSingleNode("Frequency").InnerText);
-                        ridgedMF.Lacunarity = double.Parse(node.SelectSingleNode("Lacunarity").InnerText);
+                        ridgedMF.Frequency = ParseDouble(node.SelectSingleNode("Frequency").InnerText);
+                        ridgedMF.Lacunarity = ParseDouble(node.SelectSingleNode("Lacunarity").InnerText);
                         ridgedMF.OctaveCount = int.Parse(node.SelectSingleNode("OctaveCount").InnerText);
                         ridgedMF.Quality = (QualityMode)Enum.Parse(typeof(QualityMode), node.SelectSingleNode("Quality").InnerText);
                         ridgedMF.Seed = int.Parse(node.SelectSingleNode("Seed").InnerText);
@@ -594,13 +595,13 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Spheres":
                         Spheres spheres = new Spheres();
-                        spheres.Frequency = double.Parse(node.SelectSingleNode("Frequency").InnerText);
+                        spheres.Frequency = ParseDouble(node.SelectSingleNode("Frequency").InnerText);
                         module = spheres;
                         break;
                     case "Voronoi":
                         Voronoi voronoi = new Voronoi();
-                        voronoi.Frequency = double.Parse(node.SelectSingleNode("Frequency").InnerText);
-                        voronoi.Displacement = double.Parse(node.SelectSingleNode("Displacement").InnerText);
+                        voronoi.Frequency = ParseDouble(node.SelectSingleNode("Frequency").InnerText);
+                        voronoi.Displacement = ParseDouble(node.SelectSingleNode("Displacement").InnerText);
                         voronoi.UseDistance = bool.Parse(node.SelectSingleNode("UseDistance").InnerText);
                         voronoi.Seed = int.Parse(node.SelectSingleNode("Seed").InnerText);
                         module = voronoi;
@@ -630,8 +631,8 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Clamp":
                         Clamp clamp = new Clamp();
-                        clamp.Maximum = double.Parse(node.SelectSingleNode("Maximum").InnerText);
-                        clamp.Minimum = double.Parse(node.SelectSingleNode("Minimum").InnerText);
+                        clamp.Maximum = ParseDouble(node.SelectSingleNode("Maximum").InnerText);
+                        clamp.Minimum = ParseDouble(node.SelectSingleNode("Minimum").InnerText);
                         module = clamp;
 
                         XmlNode clampInputs = node.SelectSingleNode("ModuleInputs");
@@ -643,8 +644,8 @@ namespace WorldForge.LibnoiseDesigner
 
                         foreach (XmlNode cpNode in node.SelectSingleNode("ControlPoints").ChildNodes)
                         {
-                            double x = double.Parse(cpNode.InnerText.Split(',')[0]);
-                            double y = double.Parse(cpNode.InnerText.Split(',')[1]);
+                            double x = ParseDouble(cpNode.InnerText.Split(',')[0]);
+                            double y = ParseDouble(cpNode.InnerText.Split(',')[1]);
                             curve.Add(x, y);
                         }
 
@@ -661,7 +662,7 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Exponent":
                         Exponent exponent = new Exponent();
-                        exponent.Value = double.Parse(node.SelectSingleNode("Value").InnerText);
+                        exponent.Value = ParseDouble(node.SelectSingleNode("Value").InnerText);
                         module = exponent;
 
                         XmlNode exponentInputs = node.SelectSingleNode("ModuleInputs");
@@ -698,9 +699,9 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Rotate":
                         Rotate rotate = new Rotate();
-                        rotate.X = double.Parse(node.SelectSingleNode("X").InnerText);
-                        rotate.Y = double.Parse(node.SelectSingleNode("Y").InnerText);
-                        rotate.Z = double.Parse(node.SelectSingleNode("Z").InnerText);
+                        rotate.X = ParseDouble(node.SelectSingleNode("X").InnerText);
+                        rotate.Y = ParseDouble(node.SelectSingleNode("Y").InnerText);
+                        rotate.Z = ParseDouble(node.SelectSingleNode("Z").InnerText);
                         module = rotate;
 
                         XmlNode rotateInputs = node.SelectSingleNode("ModuleInputs");
@@ -708,9 +709,9 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Scale":
                         Scale scale = new Scale();
-                        scale.X = double.Parse(node.SelectSingleNode("X").InnerText);
-                        scale.Y = double.Parse(node.SelectSingleNode("Y").InnerText);
-                        scale.Z = double.Parse(node.SelectSingleNode("Z").InnerText);
+                        scale.X = ParseDouble(node.SelectSingleNode("X").InnerText);
+                        scale.Y = ParseDouble(node.SelectSingleNode("Y").InnerText);
+                        scale.Z = ParseDouble(node.SelectSingleNode("Z").InnerText);
                         module = scale;
 
                         XmlNode scaleInputs = node.SelectSingleNode("ModuleInputs");
@@ -718,8 +719,8 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "ScaleBias":
                         ScaleBias scaleBias = new ScaleBias();
-                        scaleBias.Scale = double.Parse(node.SelectSingleNode("Scale").InnerText);
-                        scaleBias.Bias = double.Parse(node.SelectSingleNode("Bias").InnerText);
+                        scaleBias.Scale = ParseDouble(node.SelectSingleNode("Scale").InnerText);
+                        scaleBias.Bias = ParseDouble(node.SelectSingleNode("Bias").InnerText);
                         module = scaleBias;
 
                         XmlNode scaleBiasInputs = node.SelectSingleNode("ModuleInputs");
@@ -727,9 +728,9 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Select":
                         Select select = new Select();
-                        select.Minimum = double.Parse(node.SelectSingleNode("Minimum").InnerText);
-                        select.Maximum = double.Parse(node.SelectSingleNode("Maximum").InnerText);
-                        select.FallOff = double.Parse(node.SelectSingleNode("FallOff").InnerText);
+                        select.Minimum = ParseDouble(node.SelectSingleNode("Minimum").InnerText);
+                        select.Maximum = ParseDouble(node.SelectSingleNode("Maximum").InnerText);
+                        select.FallOff = ParseDouble(node.SelectSingleNode("FallOff").InnerText);
                         module = select;
 
                         XmlNode selectInputs = node.SelectSingleNode("ModuleInputs");
@@ -749,7 +750,7 @@ namespace WorldForge.LibnoiseDesigner
 
                         foreach (XmlNode cpNode in node.SelectSingleNode("ControlPoints").ChildNodes)
                         {
-                            terrace.Add(double.Parse(cpNode.InnerText));
+                            terrace.Add(ParseDouble(cpNode.InnerText));
                         }
 
                         XmlNode terraceInputs = node.SelectSingleNode("ModuleInputs");
@@ -757,9 +758,9 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Translate":
                         Translate translate = new Translate();
-                        translate.X = double.Parse(node.SelectSingleNode("X").InnerText);
-                        translate.Y = double.Parse(node.SelectSingleNode("Y").InnerText);
-                        translate.Z = double.Parse(node.SelectSingleNode("Z").InnerText);
+                        translate.X = ParseDouble(node.SelectSingleNode("X").InnerText);
+                        translate.Y = ParseDouble(node.SelectSingleNode("Y").InnerText);
+                        translate.Z = ParseDouble(node.SelectSingleNode("Z").InnerText);
                         module = translate;
 
                         XmlNode translateInputs = node.SelectSingleNode("ModuleInputs");
@@ -767,8 +768,8 @@ namespace WorldForge.LibnoiseDesigner
                         break;
                     case "Turbulence":
                         Turbulence turbulence = new Turbulence();
-                        turbulence.Frequency = double.Parse(node.SelectSingleNode("Frequency").InnerText);
-                        turbulence.Power = double.Parse(node.SelectSingleNode("Power").InnerText);
+                        turbulence.Frequency = ParseDouble(node.SelectSingleNode("Frequency").InnerText);
+                        turbulence.Power = ParseDouble(node.SelectSingleNode("Power").InnerText);
                         turbulence.Roughness = int.Parse(node.SelectSingleNode("Roughness").InnerText);
                         turbulence.Seed = int.Parse(node.SelectSingleNode("Seed").InnerText);
                         module = turbulence;
@@ -790,6 +791,11 @@ namespace WorldForge.LibnoiseDesigner
             }
 
             return loadedModules;
+        }
+
+        private static double ParseDouble(string val)
+        {
+            return Double.Parse(val, CultureInfo.InvariantCulture);
         }
     }
 }
