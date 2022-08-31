@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LibNoise
@@ -8,6 +10,11 @@ namespace LibNoise
     public class NoiseFactory
     {
         private const int UC_BORDER = 1;
+
+        public const float WORLD_SOUTH = -90.0f;
+        public const float WORLD_NORTH = 90.0f;
+        public const float WORLD_WEST = -180.0f;
+        public const float WORLD_EAST = 180.0f;
 
         /// <summary>
         /// Generates a spherical projection of a point in the noise map.
@@ -23,12 +30,13 @@ namespace LibNoise
 
         /// <summary>
         /// Generates a spherical projection of the noise map.
+        /// Created as a Equirectangular Projection
         /// </summary>
         /// <param name="south">The clip region to the south.</param>
         /// <param name="north">The clip region to the north.</param>
         /// <param name="west">The clip region to the west.</param>
         /// <param name="east">The clip region to the east.</param>
-        public static double[,] GenerateSpherical(ModuleBase module, int width, int height, double south, double north, double west, double east, bool isNormalized = true, int scale = 0)
+        public static double[,] GenerateSpherical(ModuleBase module, int width, int height, double south, double north, double west, double east, bool isNormalized = true, int scale = 0, int threads = 1)
         {
             int ucWidth = width + UC_BORDER * 2;
             int ucHeight = height + UC_BORDER * 2;
@@ -60,7 +68,7 @@ namespace LibNoise
             // now that we have each sample calculated, run through and fetch the noise
             // Parallelism should be set somwhere from 1 to Processor Count / 2.
             var rangePartitioner = Partitioner.Create(0, processValues.Count);
-            Parallel.ForEach(rangePartitioner, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, range =>
+            Parallel.ForEach(rangePartitioner, new ParallelOptions { MaxDegreeOfParallelism = threads }, range =>
             {
                 for (int i = range.Item1; i < range .Item2; i++)
                 {

@@ -94,6 +94,7 @@
     <Compile Include="NodeDragEvents.cs" />
     <Compile Include="NodeItem.cs" />
     <Compile Include="NodeItemsControl.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
