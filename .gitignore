@@ -44,3 +44,16 @@ Temporary Items
 ZoomAndPan/obj/Debug/ZoomAndPan_MarkupCompile.i.lref
 *.cache
 *.lref
+AdornedControl/bin
+AdornedControl/obj
+LibNoise/bin
+LibNoise/obj
+LibnoiseDesigner/bin
+LibnoiseDesigner/obj
+NetworkUI/bin
+NetworkUI/obj
+Utils/bin
+Utils/obj
+ZoomAndPan/bin
+ZoomAndPan/obj
+.vs
