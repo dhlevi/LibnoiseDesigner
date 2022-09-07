@@ -32,6 +32,7 @@ namespace WorldForge
         private int imageHeight;
         private NoiseStyles selectedNoiseStyle;
         private ColourStyles selectedColorStyle;
+        private bool erode;
 
         private enum NoiseStyles { Planar, Cylindrical, Spherical };
         private enum ColourStyles { Greyscale, RedBlue, World };
@@ -61,6 +62,7 @@ namespace WorldForge
 
             selectedNoiseStyle = NoiseStyles.Planar;
             selectedColorStyle = ColourStyles.Greyscale;
+            erode = false;
 
             GeneratePreview();
         }
@@ -87,6 +89,8 @@ namespace WorldForge
             if (noiseStyle.Equals("Planar")) selectedNoiseStyle = NoiseStyles.Planar;
             else if (noiseStyle.Equals("Cylindrical")) selectedNoiseStyle = NoiseStyles.Cylindrical;
             else selectedNoiseStyle = NoiseStyles.Spherical;
+
+            erode = CleanupMap.IsChecked.HasValue && CleanupMap.IsChecked.Value;
 
             if (colorStyle.Equals("Grayscale")) selectedColorStyle = ColourStyles.Greyscale;
             else if (colorStyle.Equals("Blue/Red")) selectedColorStyle = ColourStyles.RedBlue;
@@ -168,8 +172,21 @@ namespace WorldForge
                     noise = NoiseFactory.GenerateSpherical(module, imageWidth, imageHeight, worldSouth, worldNorth, worldWest, worldEast, true, 0);
                 }
 
-                // Generate the image from the nosie values
+                // Good enough for some testing. Add a little more options for fancier settings though
+                if (erode)
+                {
+                    // fill basins
+                    LibNoise.Erosion.DetectBasins(noise, imageWidth, imageHeight, 100, 0.5f, true, true);
 
+                    // erode
+                    LibNoise.Erosion.ThermalErosion(noise, 0.25f, 5);
+                    // LibNoise.Erosion.HydraulicErosion(noise, 100, 0.5f, true, 0.5f, 5);
+
+                    // normalize
+                    LibNoise.Erosion.Normalize(noise, imageWidth, imageHeight, 0.5f);
+                }
+
+                // Generate the image from the nosie values
                 System.Drawing.Rectangle areaToPaint = new System.Drawing.Rectangle(0, 0, imageWidth, imageHeight);
                 Bitmap bmp = new Bitmap(imageWidth, imageHeight);
                 BitmapData bmData = bmp.LockBits(areaToPaint, ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);

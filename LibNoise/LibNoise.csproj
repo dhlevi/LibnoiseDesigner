@@ -41,6 +41,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BrownianMotionNoise.cs" />
+    <Compile Include="FeatureTracer.cs" />
     <Compile Include="DropletErosion.cs" />
     <Compile Include="Generator\Billow.cs" />
     <Compile Include="Generator\Checker.cs" />

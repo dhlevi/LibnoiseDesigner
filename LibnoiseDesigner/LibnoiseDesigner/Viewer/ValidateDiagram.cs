@@ -11,16 +11,23 @@ namespace WorldForge.LibnoiseDesigner.Viewer
 {
     public class ValidateDiagram
     {
-        public static bool Validate(List<NodeViewModel> nodes)
-        {
-            bool result = true;
+        /// <summary>
+        /// Validate a set of Libnoise nodes to ensure they can generate without error, and
+        /// that their names are unique
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <returns></returns>
 
-            result = ValidateNoiseGeneration(nodes);
-            if(result) result = ValidateUniqueNames(nodes);
-            
-            return result;
+        public static bool Validate(List<NodeViewModel> nodes)
+        {   
+            return ValidateNoiseGeneration(nodes) && ValidateUniqueNames(nodes);
         }
 
+        /// <summary>
+        /// Validate the LibNoise nodes will generate a result
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <returns></returns>
         public static bool ValidateNoiseGeneration(List<NodeViewModel> nodes)
         {
             bool result = true;
@@ -40,6 +47,11 @@ namespace WorldForge.LibnoiseDesigner.Viewer
             return result;
         }
 
+        /// <summary>
+        /// Validate that the libnoise nodes contain only unique names
+        /// </summary>
+        /// <param name="nodes"></param>
+        /// <returns></returns>
         public static bool ValidateUniqueNames(List<NodeViewModel> nodes)
         {
             bool result = true;
